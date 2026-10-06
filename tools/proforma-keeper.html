@@ -92,45 +92,65 @@
   .sheet p{color:var(--sub); font-size:.88rem; line-height:1.4;}
   .sheet .btn-row{margin-top:14px; justify-content:flex-end;}
 
-  /* ---- Documento imprimible (estilo hoja de cálculo empresarial) ---- */
+  /* ---- Documento imprimible: plantilla empresarial de marca ---- */
   .print-only{display:none;}
   #printArea{
-    background:#fff; color:#111; width:182mm; margin:0 auto;
+    --kred:#b3261e; --kred-dark:#7d1a14; --kink:#171717;
+    background:#fff; color:var(--kink); width:182mm; margin:0 auto;
     font-family:Arial,Helvetica,sans-serif; font-size:9.5pt; line-height:1.35;
-    border-top:3px solid #b3261e;
   }
-  #printArea .pd-top{display:flex; justify-content:space-between; align-items:flex-start; padding-top:8mm; margin-bottom:4mm;}
-  #printArea .pd-title{font-size:22pt; font-weight:800; letter-spacing:.5px; color:#111; text-transform:uppercase;}
-  #printArea .pd-num{font-size:9pt; color:#333; margin-top:2px; font-weight:700;}
-  #printArea .pd-logo{height:15mm; object-fit:contain;}
-  #printArea .pd-biz{font-size:8pt; text-align:right; line-height:1.6; color:#222; margin-top:2mm;}
-  #printArea .pd-biz a{color:#1155cc; text-decoration:underline;}
+
+  #printArea .pd-banner{
+    background:var(--kred); color:#fff; border-radius:0 0 0 16mm;
+    padding:4.5mm 9mm 4.5mm 9mm; display:flex; justify-content:flex-end; gap:14px; flex-wrap:wrap;
+    font-size:7.6pt; font-weight:700; letter-spacing:.2px;
+  }
+  #printArea .pd-banner span{white-space:nowrap;}
+
+  #printArea .pd-head{display:flex; align-items:flex-end; justify-content:space-between; margin:-7mm 0 0; padding:0 9mm;}
+  #printArea .logo-card{
+    background:#fff; border:1px solid #e5e5e5; border-radius:3px; box-shadow:0 1px 5px rgba(0,0,0,.16);
+    padding:3mm 5mm; display:inline-flex; align-items:center;
+  }
+  #printArea .logo-card img{height:12mm; max-width:60mm; object-fit:contain; display:block;}
+  #printArea .pd-title-block{text-align:right; padding-bottom:1mm;}
+  #printArea .pd-title{font-size:21pt; font-weight:800; letter-spacing:1px; color:var(--kink); text-transform:uppercase;}
+  #printArea .pd-num{font-size:9.5pt; color:var(--kred); font-weight:800; margin-top:1px;}
+
+  #printArea .pd-metarow{display:flex; justify-content:space-between; gap:10mm; margin:7mm 9mm 5mm;}
+  #printArea .pd-to .lbl{font-size:7.6pt; font-weight:800; color:var(--kred); letter-spacing:.6px; margin-bottom:2px;}
+  #printArea .pd-to .client-name{font-size:13pt; font-weight:800; color:var(--kink);}
+  #printArea .pd-to .client-sub{font-size:8.2pt; color:#444; margin-top:2px;}
+  #printArea .pd-info{min-width:56mm;}
+  #printArea .pd-info .row{display:flex; justify-content:space-between; padding:2.6px 0; border-bottom:1px dotted #ccc; font-size:8.3pt;}
+  #printArea .pd-info .row span{color:#666;}
+  #printArea .pd-info .row b{color:var(--kink);}
 
   #printArea table{width:100%; border-collapse:collapse; table-layout:fixed;}
-  #printArea .pd-meta{margin-bottom:4mm;}
-  #printArea .pd-meta td, #printArea .pd-meta th{border:1px solid #333; padding:3.5px 7px; font-size:8.5pt; vertical-align:top;}
-  #printArea .pd-meta th{text-align:left; font-weight:700; background:#fff;}
-  #printArea .pd-meta .pd-client{font-weight:800; font-size:10.5pt; vertical-align:middle;}
-  #printArea .pd-meta .pd-client small{display:block; font-weight:400; font-size:7.6pt; color:#333; margin-top:3px;}
-
-  #printArea .pd-items th, #printArea .pd-items td{border:1px solid #333; padding:4px 7px; font-size:8.5pt;}
-  #printArea .pd-items thead th{background:#1a1a1a; color:#fff; text-align:left; font-size:8pt; text-transform:uppercase; letter-spacing:.3px;}
+  #printArea .pd-items{margin:0 9mm; width:calc(100% - 18mm);}
+  #printArea .pd-items th, #printArea .pd-items td{border:1px solid #ddd; padding:4px 7px; font-size:8.5pt;}
+  #printArea .pd-items thead th{background:var(--kred); color:#fff; text-align:left; font-size:7.8pt; text-transform:uppercase; letter-spacing:.3px; border-color:var(--kred);}
   #printArea .pd-items td.num{text-align:right; white-space:nowrap;}
-  #printArea .pd-items tr.main td{font-weight:700;}
+  #printArea .pd-items tr.main td{font-weight:700; border-top:1px solid #999;}
   #printArea .pd-items tr.main td.pfinal{background:#fff6b0;}
-  #printArea .pd-items tr.sub td{color:#333; font-weight:400; font-size:8.3pt;}
-  #printArea .pd-items tr.pad td{height:5mm; border-color:#ccc;}
+  #printArea .pd-items tr.sub td{color:#444; font-weight:400; font-size:8.2pt; border-top:none;}
+  #printArea .pd-items tr.pad td{height:4mm; border-color:#eee;}
 
-  #printArea .pd-bottom{display:flex; justify-content:space-between; gap:8mm; margin-top:4mm; align-items:flex-start;}
-  #printArea .pd-notes{flex:1; font-size:8pt; color:#222; line-height:1.65;}
-  #printArea .pd-notes b{color:#000; text-transform:uppercase; font-size:7.8pt; letter-spacing:.3px;}
-  #printArea .pd-totals{width:62mm; font-size:9pt; border:1px solid #333;}
-  #printArea .pd-totals .tr{display:flex; justify-content:space-between; padding:4px 8px; border-bottom:1px solid #ccc;}
-  #printArea .pd-totals .tr.total{border-bottom:none; border-top:2px solid #111; margin-top:0; padding-top:7px; padding-bottom:7px; font-weight:800; font-size:12pt; background:#f4f4f4;}
-  #printArea .pd-vig{margin-top:3mm; font-size:7.8pt; color:#444; font-style:italic;}
-  #printArea .pd-foot{margin-top:10mm; padding-top:3mm; border-top:1px solid #333; display:flex; justify-content:space-between; align-items:center; font-size:8pt; font-weight:700;}
-  #printArea .pd-foot .foot-brand{color:#333;}
-  #printArea .pd-foot .foot-web{color:#d8720a;}
+  #printArea .pd-bottom{display:flex; justify-content:space-between; gap:8mm; margin:5mm 9mm 0; align-items:flex-start;}
+  #printArea .pd-notes{flex:1; font-size:8pt; color:#222; line-height:1.6;}
+  #printArea .pd-notes .thanks{font-size:11pt; font-weight:800; color:var(--kink); margin-bottom:3mm;}
+  #printArea .pd-notes b{color:#000; text-transform:uppercase; font-size:7.6pt; letter-spacing:.3px;}
+  #printArea .pd-vig{margin-top:3mm; font-size:7.6pt; color:#555; font-style:italic;}
+  #printArea .pd-sign{margin-top:9mm; width:58mm; border-top:1px solid #999; padding-top:2mm; font-size:8pt;}
+  #printArea .pd-sign b{display:block; font-size:8.6pt; color:var(--kink);}
+  #printArea .pd-sign span{color:#777; font-size:7.6pt;}
+
+  #printArea .pd-totals{width:62mm; font-size:9pt; border:1px solid #ddd;}
+  #printArea .pd-totals .tr{display:flex; justify-content:space-between; padding:4px 8px; border-bottom:1px solid #eee;}
+  #printArea .pd-totals .tr.total{border-bottom:none; margin-top:0; padding-top:8px; padding-bottom:8px; font-weight:800; font-size:12.5pt; background:var(--kred); color:#fff;}
+
+  #printArea .pd-foot{margin:12mm 0 0; padding:4mm 9mm; background:var(--kink); color:#fff; border-radius:16mm 0 0 0; display:flex; justify-content:space-between; align-items:center; font-size:8pt; font-weight:700;}
+  #printArea .pd-foot .foot-web{color:#ff9f4a;}
 
   @media print{
     #appRoot{display:none !important;}
@@ -283,9 +303,9 @@ function defaultBusiness(){
   return {
     logo: DEFAULT_LOGO,
     nombre:'KEEPER',
-    direccion:'Jose Mejía 9-135 - Ibarra, Ecuador',
+    direccion:'Sucre 2-29 y Mejía - Ibarra, Ecuador',
     telefono:'0969838331',
-    email:'news@keeper.com.ec',
+    email:'nixedweb@gmail.com',
     web:'www.keeper.com.ec',
     redes:'@keeper.ecu',
     ruc:'1091708511001',
@@ -297,7 +317,15 @@ function defaultBusiness(){
   };
 }
 function loadBusiness(){
-  try{ const s=localStorage.getItem(BIZ_KEY); if(s){ return Object.assign(defaultBusiness(), JSON.parse(s)); } }catch(e){}
+  try{
+    const s=localStorage.getItem(BIZ_KEY);
+    if(s){
+      const b = Object.assign(defaultBusiness(), JSON.parse(s));
+      if(b.direccion==='Jose Mejía 9-135 - Ibarra, Ecuador') b.direccion = 'Sucre 2-29 y Mejía - Ibarra, Ecuador';
+      if(b.email==='news@keeper.com.ec') b.email = 'nixedweb@gmail.com';
+      return b;
+    }
+  }catch(e){}
   return defaultBusiness();
 }
 function saveBusiness(){ try{ localStorage.setItem(BIZ_KEY, JSON.stringify(biz)); }catch(e){} }
@@ -569,37 +597,42 @@ function printQuote(q){
   ].filter(Boolean).join(' &nbsp;·&nbsp; ');
 
   document.getElementById('printArea').innerHTML = `
-    <div class="pd-top">
-      <div>
+    <div class="pd-banner">
+      <span>📍 ${esc(biz.direccion)}</span>
+      <span>📞 ${esc(biz.telefono)}</span>
+      <span>✉️ ${esc(biz.email)}</span>
+    </div>
+    <div class="pd-head">
+      <div class="logo-card"><img src="${biz.logo}"></div>
+      <div class="pd-title-block">
         <div class="pd-title">Cotización</div>
         <div class="pd-num">N.° ${esc(q.numero||'Borrador')}</div>
       </div>
-      <div>
-        <img class="pd-logo" src="${biz.logo}">
-        <div class="pd-biz">
-          ${esc(biz.direccion)}<br>
-          Telf: ${esc(biz.telefono)}<br>
-          <a>${esc(biz.email)}</a> &nbsp;·&nbsp; <a>${esc(biz.web)}</a>
-        </div>
+    </div>
+    <div class="pd-metarow">
+      <div class="pd-to">
+        <div class="lbl">COTIZACIÓN PARA</div>
+        <div class="client-name">${esc(q.cliente.nombre || 'Cliente')}</div>
+        ${clienteBits? `<div class="client-sub">${clienteBits}</div>`:''}
+        ${q.cliente.direccion? `<div class="client-sub">Entrega: ${esc(q.cliente.direccion)}</div>`:''}
+      </div>
+      <div class="pd-info">
+        <div class="row"><span>Fecha</span><b>${fmtDateHuman(q.fecha)}</b></div>
+        <div class="row"><span>Forma de pago</span><b>${esc(q.formaPago)}</b></div>
+        <div class="row"><span>Atendido por</span><b>${esc(q.representante)}</b></div>
+        ${vigFecha? `<div class="row"><span>Válido hasta</span><b>${fmtDateHuman(vigFecha)}</b></div>`:''}
       </div>
     </div>
-    <table class="pd-meta">
-      <tr>
-        <th style="width:16%">Fecha</th><th style="width:19%">Forma de pago</th><th style="width:19%">Atendido por</th>
-        <th rowspan="2" class="pd-client">${esc(q.cliente.nombre || 'Cliente')}${clienteBits? '<small>'+clienteBits+'</small>':''}${q.cliente.direccion?'<small>Entrega: '+esc(q.cliente.direccion)+'</small>':''}</th>
-      </tr>
-      <tr>
-        <td>${fmtDateHuman(q.fecha)}</td><td>${esc(q.formaPago)}</td><td>${esc(q.representante)}</td>
-      </tr>
-    </table>
     <table class="pd-items">
       <thead><tr><th style="width:9%">Código</th><th>Descripción</th><th style="width:8%">Cant.</th><th style="width:11%">P. Uni.</th><th style="width:10%">Desc.</th><th style="width:11%">P. Final</th><th style="width:12%">Total</th></tr></thead>
       <tbody>${itemsRows}${padRows}</tbody>
     </table>
     <div class="pd-bottom">
       <div class="pd-notes">
+        <div class="thanks">¡Gracias por su preferencia!</div>
         ${q.notas? '<b>Notas y condiciones</b><br>'+nl2br(q.notas) : ''}
-        ${vigFecha? `<div class="pd-vig">Vigencia de la oferta: válida ${q.vigenciaDias} días desde su emisión (hasta ${fmtDateHuman(vigFecha)}).</div>` : ''}
+        ${vigFecha? `<div class="pd-vig">Vigencia de la oferta: válida ${q.vigenciaDias} días desde su emisión.</div>` : ''}
+        <div class="pd-sign"><b>${esc(q.representante || biz.nombre)}</b><span>Representante · ${esc(biz.nombre)}</span></div>
       </div>
       <div class="pd-totals">
         <div class="tr"><span>P. Neto</span><span>${biz.moneda}${neto.toFixed(2)}</span></div>
