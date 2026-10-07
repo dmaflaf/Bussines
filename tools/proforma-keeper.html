@@ -248,7 +248,8 @@
 
     <div class="btn-row">
       <button class="btn pri block" id="saveBtn">💾 Guardar</button>
-      <button class="btn block" id="pdfBtn">📤 Compartir / Descargar PDF</button>
+      <button class="btn block" id="downloadPdfBtn">⬇️ Descargar PDF</button>
+      <button class="btn block" id="sharePdfBtn">📤 Compartir</button>
       <button class="btn block" id="newBtn">🆕 Cotización en blanco</button>
     </div>
   </section>
@@ -645,7 +646,8 @@ function renderHistorial(){
       <div class="hsub">${esc(q.cliente.nombre||'Sin cliente')} · ${fmtDateHuman(q.fecha)}</div>
       <div class="btn-row">
         <button class="btn sm" data-act="open" data-id="${q.id}">Abrir / editar</button>
-        <button class="btn sm" data-act="pdf" data-id="${q.id}">📤 Compartir</button>
+        <button class="btn sm" data-act="download" data-id="${q.id}">⬇️</button>
+        <button class="btn sm" data-act="share" data-id="${q.id}">📤</button>
         <button class="btn sm danger" data-act="del" data-id="${q.id}">Eliminar</button>
       </div>
     </div>`;
@@ -658,8 +660,10 @@ histList.addEventListener('click', e=>{
     current = JSON.parse(JSON.stringify(q));
     loadFormFromCurrent();
     showView('nueva');
-  } else if(b.dataset.act==='pdf'){
-    shareOrDownloadPdf(q);
+  } else if(b.dataset.act==='download'){
+    downloadPdf(q);
+  } else if(b.dataset.act==='share'){
+    sharePdf(q);
   } else if(b.dataset.act==='del'){
     if(!confirm('¿Eliminar la cotización ' + q.numero + '? No se puede deshacer.')) return;
     quotes = quotes.filter(x=>x.id!==q.id);
@@ -895,16 +899,36 @@ async function generatePdfBlob(q){
   return pdf.output('blob');
 }
 
-async function shareOrDownloadPdf(q){
-  toast('Generando PDF…');
-  let blob;
+async function getPdfBlobOrFallback(q){
   try{
-    blob = await generatePdfBlob(q);
+    return await generatePdfBlob(q);
   }catch(err){
     toast('No se pudo generar el PDF, abriendo impresión…');
     printQuote(q);
-    return;
+    return null;
   }
+}
+
+function triggerBlobDownload(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=> URL.revokeObjectURL(url), 15000);
+}
+
+async function downloadPdf(q){
+  toast('Generando PDF…');
+  const blob = await getPdfBlobOrFallback(q);
+  if(!blob) return;
+  triggerBlobDownload(blob, 'Cotizacion_' + (q.numero||'borrador') + '.pdf');
+  toast('PDF descargado');
+}
+
+async function sharePdf(q){
+  toast('Generando PDF…');
+  const blob = await getPdfBlobOrFallback(q);
+  if(!blob) return;
   const filename = 'Cotizacion_' + (q.numero||'borrador') + '.pdf';
   const file = new File([blob], filename, {type:'application/pdf'});
   const shareText = (q.numero? 'Cotización ' + q.numero : 'Cotización') + ' — ' + biz.nombre;
@@ -916,20 +940,24 @@ async function shareOrDownloadPdf(q){
   }catch(err){
     if(err && err.name==='AbortError') return; // el usuario cerró el panel de compartir
   }
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=> URL.revokeObjectURL(url), 15000);
-  toast('PDF descargado');
+  triggerBlobDownload(blob, filename);
+  toast('Tu navegador no pudo compartir el archivo — se descargó en su lugar');
 }
 
-document.getElementById('pdfBtn').addEventListener('click', ()=>{
+function confirmQuoteHasNumero(){
   readFormIntoCurrent();
   if(!current.numero){
-    if(!confirm('Esta cotización no se ha guardado (no tiene número). ¿Generar el PDF igual como borrador?')) return;
+    return confirm('Esta cotización no se ha guardado (no tiene número). ¿Generar el PDF igual como borrador?');
   }
-  shareOrDownloadPdf(current);
+  return true;
+}
+document.getElementById('downloadPdfBtn').addEventListener('click', ()=>{
+  if(!confirmQuoteHasNumero()) return;
+  downloadPdf(current);
+});
+document.getElementById('sharePdfBtn').addEventListener('click', ()=>{
+  if(!confirmQuoteHasNumero()) return;
+  sharePdf(current);
 });
 
 /* ===================== Init ===================== */
