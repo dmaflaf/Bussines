@@ -6,8 +6,8 @@
 <title>Cotizaciones — KEEPER</title>
 <style>
   :root{
-    --ink:#1a1a1a; --sub:#6b7280; --bg:#f2f3f5; --card:#ffffff; --border:#e3e5e9;
-    --red:#b3261e; --red-dark:#7d1a14; --red-bg:#fbe9e7;
+    --ink:#17242b; --sub:#6b7a82; --bg:#f7f5ef; --card:#ffffff; --border:#efe9db;
+    --kdark:#0c2834; --kdark2:#06161d; --kgold:#e5903f; --kgold-ink:#1a1205;
     --green:#1e9e6a; --green-bg:#e3f7ee;
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
@@ -17,12 +17,12 @@
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --ink:#f2f3f5; --sub:#aab0bb; --bg:#111318; --card:#1a1d24; --border:#2c3038;
-      --red-bg:#3a1512; --green-bg:#0f2c22;
+      --green-bg:#0f2c22;
     }
   }
   :root[data-theme="dark"]{
     --ink:#f2f3f5; --sub:#aab0bb; --bg:#111318; --card:#1a1d24; --border:#2c3038;
-    --red-bg:#3a1512; --green-bg:#0f2c22;
+    --green-bg:#0f2c22;
   }
   *{box-sizing:border-box;}
   body{margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; -webkit-font-smoothing:antialiased;}
@@ -30,21 +30,25 @@
   input,select,textarea{font:inherit; color:var(--ink); background:var(--card); border:1px solid var(--border); border-radius:10px; padding:9px 10px;}
   textarea{resize:vertical;}
 
-  header.app{position:sticky; top:env(safe-area-inset-top,0px); z-index:30; background:var(--card); border-bottom:1px solid var(--border); padding:10px 14px;}
-  .app-top{display:flex; align-items:center; gap:10px;}
-  .app-top img{height:28px;}
-  .app-top h1{font-size:1.05rem; margin:0; flex:1; min-width:0;}
-  .tabbar{display:flex; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin-top:10px;}
+  header.app{position:sticky; top:env(safe-area-inset-top,0px); z-index:30; background:rgba(12,40,52,.88); -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3); padding:14px 14px 12px; color:#fff;}
+  .app-top{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .app-top .logobadge{background:#fff; border-radius:8px; padding:4px 8px; display:inline-flex; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,.25);}
+  .app-top img{height:22px; display:block;}
+  .app-top h1{font-size:1.1rem; margin:0; flex:1; min-width:0; font-weight:800; letter-spacing:.2px; color:#fff;}
+  .tabbar{position:relative; display:flex; gap:0; background:rgba(255,255,255,.08); border-radius:999px; padding:3px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}
   .tabbar::-webkit-scrollbar{display:none;}
-  .tabbtn{flex:0 0 auto; height:38px; padding:0 14px; border-radius:20px; border:1px solid var(--border); background:var(--bg); color:var(--ink); font-weight:700; font-size:.82rem;}
-  .tabbtn.on{background:var(--red); color:#fff; border-color:transparent;}
+  .tabbar-highlight{position:absolute; top:3px; left:3px; height:32px; border-radius:999px; background:var(--kgold); will-change:transform; transition:transform 250ms cubic-bezier(.23,1,.32,1), width 250ms cubic-bezier(.23,1,.32,1);}
+  @media (prefers-reduced-motion: reduce){ .tabbar-highlight{transition:none;} }
+  .tabbtn{position:relative; z-index:1; flex:1 0 auto; height:32px; padding:0 14px; border-radius:999px; border:0; background:transparent; color:rgba(255,255,255,.72); font-weight:700; font-size:.78rem; transition:color 150ms ease-out, transform 100ms ease-out;}
+  .tabbtn:active{transform:scale(.97);}
+  .tabbtn.on{color:var(--kgold-ink);}
 
   .wrap{max-width:720px; margin:0 auto; padding:16px 14px 80px;}
   .view{display:none;}
   .view.on{display:block;}
 
-  .card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:14px;}
-  .card h2{font-size:.95rem; margin:0 0 12px; display:flex; align-items:center; gap:8px;}
+  .card{background:var(--card); border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:0 1px 3px rgba(23,36,43,.08);}
+  .card h2{font-size:1rem; margin:0 0 12px; font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px;}
   .fld{display:block; margin-bottom:12px;}
   .fld label{display:block; font-size:.78rem; color:var(--sub); font-weight:600; margin-bottom:5px;}
   .fld input, .fld select, .fld textarea{width:100%; height:44px;}
@@ -56,30 +60,32 @@
   .logo-pick img{height:52px; max-width:140px; object-fit:contain; background:#fff; border:1px solid var(--border); border-radius:8px; padding:4px;}
   .logo-pick .btn{height:40px;}
 
-  .btn{border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--ink); font-weight:700; padding:0 16px; height:44px;}
-  .btn.pri{background:var(--red); color:#fff; border-color:transparent;}
+  .btn{border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--ink); font-weight:700; padding:0 16px; height:44px; transition:transform 100ms ease-out;}
+  .btn:active{transform:scale(.97);}
+  .btn.pri{background:var(--kgold); color:var(--kgold-ink); border-color:transparent; font-weight:800; letter-spacing:.2px;}
   .btn.sm{height:36px; padding:0 12px; font-size:.82rem;}
   .btn.danger{color:#c0392b;}
   .btn.block{width:100%;}
   .btn-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;}
 
-  .item-card{border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; background:var(--bg);}
+  .item-card{border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; background:#fffdf9;}
   .item-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
   .item-head b{font-size:.8rem; color:var(--sub);}
-  .item-del{width:32px; height:32px; border-radius:8px; border:0; background:transparent; color:var(--sub); font-size:18px;}
+  .item-del{width:32px; height:32px; border-radius:8px; border:0; background:transparent; color:var(--sub); font-size:18px; transition:transform 100ms ease-out;}
+  .item-del:active{transform:scale(.9);}
   .item-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .item-grid .full{grid-column:1 / -1;}
-  .item-total{text-align:right; font-weight:800; margin-top:6px; font-size:.9rem;}
+  .item-total{text-align:right; font-weight:800; margin-top:6px; font-size:.9rem; color:var(--kdark);}
 
-  .totals{background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:12px 14px;}
+  .totals{background:#fffdf9; border:1px solid var(--border); border-radius:12px; padding:12px 14px;}
   .totals .t-row{display:flex; justify-content:space-between; padding:5px 0; font-size:.88rem;}
-  .totals .t-row.total{border-top:2px solid var(--ink); margin-top:6px; padding-top:10px; font-weight:800; font-size:1.05rem;}
+  .totals .t-row.total{border-top:2px solid var(--kgold); margin-top:6px; padding-top:10px; font-weight:800; font-size:1.05rem; color:var(--kdark);}
   .totals input{width:110px; height:36px; text-align:right;}
 
-  .hist-item{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:10px;}
+  .hist-item{background:var(--card); border-radius:14px; padding:13px 15px; margin-bottom:10px; box-shadow:0 1px 3px rgba(23,36,43,.08);}
   .hist-item .hh{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
-  .hist-item .hnum{font-weight:800; font-size:.95rem;}
-  .hist-item .htotal{font-weight:800; color:var(--red);}
+  .hist-item .hnum{font-weight:800; font-size:.95rem; color:var(--kdark);}
+  .hist-item .htotal{font-weight:800; color:var(--kdark);}
   .hist-item .hsub{font-size:.8rem; color:var(--sub); margin:2px 0 8px;}
   .empty-msg{color:var(--sub); font-size:.88rem; text-align:center; padding:30px 10px;}
 
@@ -171,10 +177,11 @@
 <div id="appRoot">
 <header class="app">
   <div class="app-top">
-    <img id="headerLogo" src="" alt="">
+    <span class="logobadge"><img id="headerLogo" src="" alt=""></span>
     <h1>Cotizaciones</h1>
   </div>
   <nav class="tabbar">
+    <span class="tabbar-highlight" aria-hidden="true"></span>
     <button class="tabbtn" data-view="nueva">🧾 Nueva</button>
     <button class="tabbtn" data-view="historial">📜 Historial</button>
     <button class="tabbtn" data-view="negocio">⚙️ Mi negocio</button>
@@ -364,14 +371,23 @@ let current = newQuote();
 
 /* ===================== Tabs ===================== */
 const views = ['nueva','historial','negocio'];
+const tabHighlight = document.querySelector('.tabbar-highlight');
+function moveTabHighlight(){
+  const on = document.querySelector('.tabbtn.on');
+  if(!on || !tabHighlight) return;
+  tabHighlight.style.width = on.offsetWidth + 'px';
+  tabHighlight.style.transform = `translateX(${on.offsetLeft - 3}px)`;
+}
 function showView(v){
   views.forEach(x=>{
     document.getElementById('view-'+x).classList.toggle('on', x===v);
   });
   document.querySelectorAll('.tabbtn').forEach(b=> b.classList.toggle('on', b.dataset.view===v));
+  moveTabHighlight();
   if(v==='historial') renderHistorial();
 }
 document.querySelectorAll('.tabbtn').forEach(b=> b.addEventListener('click', ()=> showView(b.dataset.view)));
+window.addEventListener('resize', moveTabHighlight);
 
 /* ===================== Render: formulario de ítems ===================== */
 const itemsList = document.getElementById('itemsList');
