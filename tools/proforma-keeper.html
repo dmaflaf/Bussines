@@ -376,10 +376,15 @@ function nextCounter(){
 let biz = loadBusiness();
 let quotes = loadQuotes();
 
-/* ===================== Nube (Firebase) =====================
-   FIREBASE_CONFIG se completa una sola vez, al crear el proyecto de Firebase.
-   Mientras esté en null, la app funciona 100% local como antes (sin romper nada). */
-const FIREBASE_CONFIG = null;
+/* ===================== Nube (Firebase) ===================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAk7yTwExblApCXFuq20DRsCLkjilyxJiw",
+  authDomain: "keeper-cotizaciones.firebaseapp.com",
+  projectId: "keeper-cotizaciones",
+  storageBucket: "keeper-cotizaciones.firebasestorage.app",
+  messagingSenderId: "1005278342351",
+  appId: "1:1005278342351:web:10d5fdcb4adb806d3d1bba"
+};
 const SYNC_KEY = 'kp_synccode_v1';
 let fbApp=null, db=null, authReady=null, unsubBiz=null, unsubQuotes=null, cloudConnecting=false;
 
