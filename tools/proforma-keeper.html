@@ -818,7 +818,7 @@ function renderPrintArea(q){
       <span class="foot-web">${esc(biz.web)}</span>
     </div>
   `;
-  document.title = 'Cotizacion_' + (q.numero||'borrador');
+  document.title = pdfFilename(q).replace(/\.pdf$/, '');
 }
 function printQuote(q){
   renderPrintArea(q);
@@ -899,6 +899,12 @@ async function generatePdfBlob(q){
   return pdf.output('blob');
 }
 
+function pdfFilename(q){
+  const raw = (q.cliente && q.cliente.nombre || '').trim();
+  const safe = raw.replace(/[\\/:*?"<>|]/g, '').trim() || 'Cliente';
+  return 'Cotización - ' + safe + '.pdf';
+}
+
 async function getPdfBlobOrFallback(q){
   try{
     return await generatePdfBlob(q);
@@ -921,7 +927,7 @@ async function downloadPdf(q){
   toast('Generando PDF…');
   const blob = await getPdfBlobOrFallback(q);
   if(!blob) return;
-  triggerBlobDownload(blob, 'Cotizacion_' + (q.numero||'borrador') + '.pdf');
+  triggerBlobDownload(blob, pdfFilename(q));
   toast('PDF descargado');
 }
 
@@ -929,7 +935,7 @@ async function sharePdf(q){
   toast('Generando PDF…');
   const blob = await getPdfBlobOrFallback(q);
   if(!blob) return;
-  const filename = 'Cotizacion_' + (q.numero||'borrador') + '.pdf';
+  const filename = pdfFilename(q);
   const file = new File([blob], filename, {type:'application/pdf'});
   const shareText = (q.numero? 'Cotización ' + q.numero : 'Cotización') + ' — ' + biz.nombre;
   try{
